@@ -35,6 +35,10 @@ export class PlayerComponent implements OnInit {
     }
   }
 
+  hasProfilePicture(): boolean {
+    return !!(this.player?.profilePicture && this.player.profilePicture.length > 0);
+  }
+
   get hand() {
     return this.player?.hand || this.dealerHand;
   }
