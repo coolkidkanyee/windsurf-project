@@ -1,3 +1,3 @@
 export const environment = {
-  gameServer: 'wss://21-online-backend.fly.dev',
+  gameServer: 'wss://windsurf-project-i29q.onrender.com',
 };
