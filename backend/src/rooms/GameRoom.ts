@@ -177,12 +177,14 @@ export class GameRoom extends Room<GameState> {
 
     const customName = options?.playerName?.trim();
     const displayName = customName && customName.length > 0 ? customName : generateUserName();
+    const profilePicture = options?.profilePicture || '';
 
     this.state.players.set(
       client.sessionId,
       new Player({
         sessionId: client.sessionId,
         displayName: displayName,
+        profilePicture: profilePicture,
         admin: this.state.players.size == 0,
       })
     );

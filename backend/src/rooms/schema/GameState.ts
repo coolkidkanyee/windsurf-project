@@ -92,6 +92,7 @@ export class Hand extends Schema {
 export class Player extends Schema {
   @type('string') sessionId: string;
   @type('string') displayName: string;
+  @type('string') profilePicture: string = ''; // Base64 encoded image data
   @type('number') money: number = gameConfig.initialPlayerMoney;
   @type('number') bet: number = gameConfig.initialPlayerBet;
   @type('boolean') ready = false;
