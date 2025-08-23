@@ -49,6 +49,12 @@ export class JoinScreenComponent {
           const resizedBase64 = canvas.toDataURL('image/jpeg', 0.7);
           this.profilePicturePreview = resizedBase64;
           this.profilePictureData = resizedBase64;
+          
+          console.log('Profile picture processed:', {
+            originalSize: file.size,
+            base64Length: resizedBase64.length,
+            preview: resizedBase64.substring(0, 100) + '...'
+          });
         };
         img.src = e.target.result;
       };

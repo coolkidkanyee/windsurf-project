@@ -47,10 +47,12 @@ export class GameService {
   }
 
   public createRoom(playerName?: string, profilePicture?: string) {
+    console.log('Creating room with:', { playerName, profilePictureLength: profilePicture?.length || 0 });
     return this.updateRoom(() => this.client.create('gameRoom', { playerName, profilePicture }), true);
   }
 
   public joinRoom(id: string, playerName?: string, profilePicture?: string) {
+    console.log('Joining room with:', { playerName, profilePictureLength: profilePicture?.length || 0 });
     return this.updateRoom(() => this.client.joinById(id.toUpperCase(), { playerName, profilePicture }), true);
   }
 

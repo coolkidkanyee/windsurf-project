@@ -179,6 +179,8 @@ export class GameRoom extends Room<GameState> {
     const displayName = customName && customName.length > 0 ? customName : generateUserName();
     const profilePicture = options?.profilePicture || '';
 
+    this.log(`Player joining with profile picture length: ${profilePicture.length}`, client);
+
     this.state.players.set(
       client.sessionId,
       new Player({
