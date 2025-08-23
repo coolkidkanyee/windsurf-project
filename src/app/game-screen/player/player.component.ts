@@ -6,7 +6,7 @@ import { Card, Hand, Player } from 'backend/src/rooms/schema/GameState';
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.scss'],
 })
-export class PlayerComponent {
+export class PlayerComponent implements OnInit {
   @Input() player?: Player;
   @Input() dealerHand?: Hand;
   @Input() type: 'dealer' | 'player' = 'player';
@@ -22,6 +22,18 @@ export class PlayerComponent {
   @Input() endTimestamp: number = 0;
   @Input() clientIsPlayer: boolean = false;
   @Input() clientIsAdmin?: boolean = false;
+
+  ngOnInit() {
+    // Debug profile picture data
+    if (this.player) {
+      console.log('Player data:', {
+        name: this.player.displayName,
+        hasProfilePicture: !!this.player.profilePicture,
+        profilePictureLength: this.player.profilePicture?.length || 0,
+        profilePicturePreview: this.player.profilePicture?.substring(0, 50) + '...'
+      });
+    }
+  }
 
   get hand() {
     return this.player?.hand || this.dealerHand;
