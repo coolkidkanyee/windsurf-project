@@ -20,6 +20,22 @@ export class GameRoom extends Room<GameState> {
   public autoDispose = false;
   private LOBBY_CHANNEL = 'GameRoom';
 
+  // Declare properties that exist on Room base class
+  declare state: GameState;
+  declare roomId: string;
+  declare clock: any;
+  declare presence: any;
+  declare clients: any;
+  declare reconnections: any;
+  
+  allowReconnection(client: any, seconds?: number) {
+    return super.allowReconnection(client, seconds);
+  }
+  
+  disconnect() {
+    return super.disconnect();
+  }
+
 
   private log(msg: string, client?: Client | string) {
     if (process.env.ROOM_LOG_DISABLE == 'true') return;
