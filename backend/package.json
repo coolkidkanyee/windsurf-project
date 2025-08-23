@@ -7,7 +7,7 @@
     "start": "ts-node-dev --respawn --transpile-only src/index.ts",
     "start-prod": "node ./lib/index.js",
     "build": "npm run clean && tsc && node node_modules/copyfiles/copyfiles package.json ./lib && node node_modules/copyfiles/copyfiles arena.env ./lib",
-    "clean": "rimraf lib",
+    "clean": "npx rimraf lib",
     "test": "jest 'test'",
     "loadtest": "colyseus-loadtest test/loadtest.ts --room gameRoom --numClients 100 --endpoint ws://localhost:2567",
     "deploy": "echo 'Deploy to Render by connecting your GitHub repository to Render dashboard'"
