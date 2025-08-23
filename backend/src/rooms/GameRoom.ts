@@ -181,15 +181,13 @@ export class GameRoom extends Room<GameState> {
 
     this.log(`Player joining with profile picture length: ${profilePicture.length}`, client);
 
-    this.state.players.set(
-      client.sessionId,
-      new Player({
-        sessionId: client.sessionId,
-        displayName: displayName,
-        profilePicture: profilePicture,
-        admin: this.state.players.size == 0,
-      })
-    );
+    const player = new Player();
+    player.sessionId = client.sessionId;
+    player.displayName = displayName;
+    player.profilePicture = profilePicture;
+    player.admin = this.state.players.size == 0;
+
+    this.state.players.set(client.sessionId, player);
 
     this.triggerRoomDeleteCheck();
     this.triggerNewRoundCheck();
