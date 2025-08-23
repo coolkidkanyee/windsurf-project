@@ -20,8 +20,6 @@ export class GameRoom extends Room<GameState> {
   public autoDispose = false;
   private LOBBY_CHANNEL = 'GameRoom';
 
-  // Initialize state property
-  state: GameState;
 
   private log(msg: string, client?: Client | string) {
     if (process.env.ROOM_LOG_DISABLE == 'true') return;
