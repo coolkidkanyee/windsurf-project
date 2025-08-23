@@ -15,6 +15,8 @@ export class JoinScreenComponent {
     Validators.maxLength(gameConfig.roomIdLength),
   ]);
 
+  playerName = new FormControl('');
+
   joinButtonInvalidTooltip = `Room ID needs to be ${gameConfig.roomIdLength} letters long.`;
 
   constructor(public game: GameService) {}

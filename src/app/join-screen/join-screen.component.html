@@ -8,10 +8,21 @@
   </header>
 
   <div class="flex flex-col gap-8">
+    <mat-form-field class="-mb-4" [hideRequiredMarker]="true">
+      <mat-label>Your Name (optional)</mat-label>
+      <input
+        matInput
+        data-cy="playerName-input"
+        [formControl]="playerName"
+        placeholder="Leave empty for random name"
+        maxlength="20"
+      />
+    </mat-form-field>
+
     <button
       mat-raised-button
       color="primary"
-      (click)="game.createRoom()"
+      (click)="game.createRoom(playerName.value || '')"
       [disabled]="game.joinInProgress"
       data-cy="create-btn"
     >
@@ -38,7 +49,7 @@
         mat-raised-button
         color="primary"
         class="w-full"
-        (click)="game.joinRoom(roomId.value!)"
+        (click)="game.joinRoom(roomId.value!, playerName.value || '')"
         [disabled]="roomId.invalid || game.joinInProgress"
         data-cy="join-btn"
       >

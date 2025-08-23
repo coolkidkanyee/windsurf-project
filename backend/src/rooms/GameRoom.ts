@@ -172,14 +172,17 @@ export class GameRoom extends Room<GameState> {
     return true;
   }
 
-  onJoin(client: Client) {
+  onJoin(client: Client, options: any) {
     this.log(`Join`, client);
+
+    const customName = options?.playerName?.trim();
+    const displayName = customName && customName.length > 0 ? customName : generateUserName();
 
     this.state.players.set(
       client.sessionId,
       new Player({
         sessionId: client.sessionId,
-        displayName: generateUserName(),
+        displayName: displayName,
         admin: this.state.players.size == 0,
       })
     );

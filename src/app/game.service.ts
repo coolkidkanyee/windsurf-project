@@ -46,12 +46,12 @@ export class GameService {
     this.client = new Colyseus.Client(environment.gameServer);
   }
 
-  public createRoom() {
-    return this.updateRoom(() => this.client.create('gameRoom'), true);
+  public createRoom(playerName?: string) {
+    return this.updateRoom(() => this.client.create('gameRoom', { playerName }), true);
   }
 
-  public joinRoom(id: string) {
-    return this.updateRoom(() => this.client.joinById(id.toUpperCase()), true);
+  public joinRoom(id: string, playerName?: string) {
+    return this.updateRoom(() => this.client.joinById(id.toUpperCase(), { playerName }), true);
   }
 
   /**
