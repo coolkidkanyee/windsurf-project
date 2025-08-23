@@ -166,7 +166,7 @@ export class GameRoom extends Room<GameState> {
       this.state.players.size + Object.keys(this.reconnections).length ==
       gameConfig.maxClients
     ) {
-      Object.values(this.reconnections)[0].reject();
+      (Object.values(this.reconnections)[0] as any).reject();
     }
 
     return true;
