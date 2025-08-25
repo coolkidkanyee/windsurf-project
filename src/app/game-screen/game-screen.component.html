@@ -77,6 +77,7 @@
     class="sm:mt-6"
     [betMenuDisabled]="game.roundInProgress || game.player?.ready"
     [currentBet]="game.player?.bet || 0"
+    [maxBet]="game.maxBet"
     (changeBet)="game.changeBet($event)"
     (setBet)="game.setBet($event)"
     [readyMenuHidden]="game.roundInProgress"

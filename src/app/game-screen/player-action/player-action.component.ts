@@ -9,6 +9,7 @@ import gameConfig from 'backend/src/game.config';
 export class PlayerActionsComponent {
   @Input() betMenuDisabled? = false;
   @Input() currentBet = 0;
+  @Input() maxBet = gameConfig.maxBet;
   @Output() changeBet = new EventEmitter<number>();
   @Output() setBet = new EventEmitter<number>();
 

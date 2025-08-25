@@ -13,7 +13,8 @@ export default {
   roundStateEndTimePlayer: 500,
 
   minBet: 1,
-  maxBet: 1000,
+  maxBet: 1000, // Default max bet, will be overridden by dynamic calculation
+  minBetWhenNegative: 1000, // Max bet when player has negative money
   initialPlayerMoney: 10000,
   initialPlayerBet: 50,
 

@@ -1,12 +1,7 @@
-import { Room, Client, Delayed, Protocol, ServerError } from 'colyseus';
+import { Room, Client, Delayed } from 'colyseus';
 import { GameState, Player } from './schema/GameState';
 import gameConfig from '../game.config';
-import log from 'npmlog';
-import {
-  generateUserName,
-  generateRoomId,
-  computeRoundOutcome,
-} from './utility';
+import { computeRoundOutcome, generateUserName, calculateMaxBet, generateRoomId } from './utility';
 
 export class GameRoom extends Room<GameState> {
   /** Current timeout skip reference */
@@ -106,8 +101,10 @@ export class GameRoom extends Room<GameState> {
       )
         return;
 
-      //Constrain bet
-      newBet = Math.min(Math.max(newBet, gameConfig.minBet), gameConfig.maxBet);
+      //Constrain bet using dynamic max based on player's money
+      const player = this.state.players.get(client.sessionId);
+      const maxBet = calculateMaxBet(player.money);
+      newBet = Math.min(Math.max(newBet, gameConfig.minBet), maxBet);
 
       this.log(`Bet change: ${newBet}`, client);
 

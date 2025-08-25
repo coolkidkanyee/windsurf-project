@@ -42,6 +42,16 @@ export class GameService {
     );
   }
 
+  public get maxBet() {
+    if (!this.player) return gameConfig.maxBet;
+    
+    if (this.player.money < 0) {
+      return gameConfig.minBetWhenNegative;
+    } else {
+      return Math.max(this.player.money, gameConfig.minBet);
+    }
+  }
+
   constructor(private router: Router) {
     this.client = new Colyseus.Client(environment.gameServer);
   }
