@@ -1,4 +1,5 @@
-import { Room, Client, Delayed } from 'colyseus';
+import { Room, Client, Delayed, ServerError } from 'colyseus';
+import { Protocol } from 'colyseus';
 import { GameState, Player } from './schema/GameState';
 import gameConfig from '../game.config';
 import { computeRoundOutcome, generateUserName, calculateMaxBet, generateRoomId } from './utility';
@@ -35,7 +36,7 @@ export class GameRoom extends Room<GameState> {
   private log(msg: string, client?: Client | string) {
     if (process.env.ROOM_LOG_DISABLE == 'true') return;
 
-    log.info(
+    console.log(
       `Room ${this.roomId} ${
         client ? 'Client ' + ((<any>client).sessionId || client) : ''
       }`,
