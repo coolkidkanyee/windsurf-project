@@ -105,9 +105,10 @@ export class GameRoom extends Room<GameState> {
       //Constrain bet using dynamic max based on player's money
       const player = this.state.players.get(client.sessionId);
       const maxBet = calculateMaxBet(player.money);
+      const originalBet = newBet;
       newBet = Math.min(Math.max(newBet, gameConfig.minBet), maxBet);
 
-      this.log(`Bet change: ${newBet}`, client);
+      this.log(`Bet change: ${originalBet} -> ${newBet} (money: ${player.money}, maxBet: ${maxBet})`, client);
 
       this.state.players.get(client.sessionId).bet = newBet;
     });
