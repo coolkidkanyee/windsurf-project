@@ -46,7 +46,7 @@ export class GameService {
     if (!this.player) return gameConfig.maxBet;
     
     if (this.player.money < 0) {
-      return gameConfig.minBetWhenNegative;
+      return Number.MAX_SAFE_INTEGER;
     } else {
       return Math.max(this.player.money, gameConfig.minBet);
     }

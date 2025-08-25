@@ -79,8 +79,8 @@ export function computeRoundOutcome(
  */
 export function calculateMaxBet(playerMoney: number): number {
   if (playerMoney < 0) {
-    // If player has negative money, they can only bet up to 1000
-    return gameConfig.minBetWhenNegative;
+    // If player has negative money, they can bet unlimited amounts
+    return Number.MAX_SAFE_INTEGER;
   } else {
     // If player has positive money, they can bet their entire amount
     return Math.max(playerMoney, gameConfig.minBet);
