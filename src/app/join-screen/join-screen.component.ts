@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import gameConfig from 'backend/src/game.config';
 import { GameService } from '../game.service';
 
@@ -8,7 +9,7 @@ import { GameService } from '../game.service';
   templateUrl: './join-screen.component.html',
   styleUrls: ['./join-screen.component.scss'],
 })
-export class JoinScreenComponent {
+export class JoinScreenComponent implements OnInit {
   roomId = new FormControl('', [
     Validators.required,
     Validators.minLength(gameConfig.roomIdLength),
@@ -18,10 +19,22 @@ export class JoinScreenComponent {
   playerName = new FormControl('');
   profilePicturePreview: string | null = null;
   profilePictureData: string = '';
+  version: string = '';
 
   joinButtonInvalidTooltip = `Room ID needs to be ${gameConfig.roomIdLength} letters long.`;
 
-  constructor(public game: GameService) {}
+  constructor(public game: GameService, private http: HttpClient) {}
+
+  ngOnInit() {
+    this.loadVersion();
+  }
+
+  loadVersion() {
+    this.http.get<{version: string}>('/assets/version.json').subscribe({
+      next: (data) => this.version = data.version,
+      error: () => this.version = '1.34'
+    });
+  }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];

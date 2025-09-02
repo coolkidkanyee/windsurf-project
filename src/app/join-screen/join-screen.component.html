@@ -101,8 +101,18 @@
     </div>
   </div>
 
-  <footer>
-    <a class="text-neutral-400" href="https://github.com/stopnoanime/21-online"
+  <footer class="text-center space-y-2">
+    <div class="text-neutral-400 text-sm">
+      Version 
+      <a 
+        [href]="'https://github.com/coolkidkanyee/windsurf-project/commit/' + version" 
+        target="_blank"
+        class="text-blue-400 hover:text-blue-300 underline"
+      >
+        {{ version }}
+      </a>
+    </div>
+    <a class="text-neutral-400" href="https://github.com/coolkidkanyee/windsurf-project"
       >View the source on GitHub</a
     >
   </footer>

@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Get current version from version.json
+CURRENT_VERSION=$(cat src/assets/version.json | grep -o '"version": "[^"]*"' | cut -d'"' -f4)
+
+# Extract major and minor version numbers
+MAJOR=$(echo $CURRENT_VERSION | cut -d'.' -f1)
+MINOR=$(echo $CURRENT_VERSION | cut -d'.' -f2)
+
+# Increment minor version
+NEW_MINOR=$((MINOR + 1))
+NEW_VERSION="$MAJOR.$NEW_MINOR"
+
+# Update version.json
+echo "{
+  \"version\": \"$NEW_VERSION\"
+}" > src/assets/version.json
+
+# Add the updated version file to the commit
+git add src/assets/version.json
+git commit --amend --no-edit
+
+echo "Version updated to $NEW_VERSION"
