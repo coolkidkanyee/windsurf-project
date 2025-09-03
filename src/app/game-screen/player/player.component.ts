@@ -58,4 +58,25 @@ export class PlayerComponent implements OnInit {
     draw: 'Draw',
     '': '',
   };
+
+  shouldShowWinStreak(): boolean {
+    return !!(this.player && this.player.winStreak >= 3 && this.type !== 'dealer');
+  }
+
+  shouldShowLossStreak(): boolean {
+    return !!(this.player && 
+           this.type !== 'dealer' &&
+           (this.player.lossStreak >= 3 || this.player.money < 0));
+  }
+
+  getWinStreakTooltip(): string {
+    return `${this.player?.winStreak || 0} wins in a row`;
+  }
+
+  getLossStreakTooltip(): string {
+    if (this.player && this.player.money < 0) {
+      return `${this.player.lossStreak || 0} losses in a row (negative money)`;
+    }
+    return `${this.player?.lossStreak || 0} losses in a row`;
+  }
 }

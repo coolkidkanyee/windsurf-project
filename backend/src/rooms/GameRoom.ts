@@ -424,6 +424,19 @@ export class GameRoom extends Room<GameState> {
 
         player.roundOutcome = outcome.outcome;
         player.money += outcome.moneyChange;
+
+        // Update win/loss streaks - streaks reset when opposite outcome occurs
+        if (outcome.outcome === 'win') {
+          player.winStreak += 1;
+          player.lossStreak = 0; // Reset loss streak on any win
+        } else if (outcome.outcome === 'lose' || outcome.outcome === 'bust') {
+          player.lossStreak += 1;
+          player.winStreak = 0; // Reset win streak on any loss
+        } else if (outcome.outcome === 'draw') {
+          // Draw resets both streaks
+          player.winStreak = 0;
+          player.lossStreak = 0;
+        }
       }
     }
 

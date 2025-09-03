@@ -19,3 +19,11 @@
   outline-width: 2px;
   outline-style: solid;
 }
+
+::ng-deep .streak-tooltip {
+  background-color: rgba(64, 64, 64, 0.9) !important;
+  color: white !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  padding: 6px 8px !important;
+}

@@ -100,6 +100,8 @@ export class Player extends Schema {
   @type('boolean') disconnected = false;
   @type('boolean') admin: boolean;
   @type('string') roundOutcome: roundOutcome;
+  @type('number') winStreak: number = 0;
+  @type('number') lossStreak: number = 0;
   @type(Hand) hand = new Hand();
 }
 

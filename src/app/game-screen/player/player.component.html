@@ -33,6 +33,26 @@
       >
         {{ type == "dealer" ? "Dealer" : player?.displayName || "No Player" }}
       </span>
+      
+      <!-- Win streak indicator (source.gif) -->
+      <img 
+        *ngIf="shouldShowWinStreak()"
+        src="/assets/source.gif" 
+        alt="Win streak"
+        class="w-6 h-6 ml-1"
+        [matTooltip]="getWinStreakTooltip()"
+        matTooltipClass="streak-tooltip"
+      />
+      
+      <!-- Loss streak indicator (clown.gif) -->
+      <img 
+        *ngIf="shouldShowLossStreak()"
+        src="/assets/clown.gif" 
+        alt="Loss streak"
+        class="w-6 h-6 ml-1"
+        [matTooltip]="getLossStreakTooltip()"
+        matTooltipClass="streak-tooltip"
+      />
     </div>
 
     <app-money-counter
