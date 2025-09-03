@@ -416,33 +416,47 @@ export class GameRoom extends Room<GameState> {
       for (const playerId of this.makeRoundIterator()) {
         const player = this.state.players.get(playerId);
 
-        const outcome = computeRoundOutcome(
-          player.hand,
-          this.state.dealerHand,
-          player.bet
-        );
+        // Check if player already busted (roundOutcome was set to 'bust' during turns)
+        let finalOutcome: string;
+        let moneyChange: number;
+        
+        if (player.roundOutcome === 'bust') {
+          // Player already busted, they lose
+          finalOutcome = 'bust';
+          moneyChange = 0; // They already lost their bet
+          console.log(`Player ${player.displayName} was already BUSTED`);
+        } else {
+          // Calculate outcome normally for non-busted players
+          const outcome = computeRoundOutcome(
+            player.hand,
+            this.state.dealerHand,
+            player.bet
+          );
+          finalOutcome = outcome.outcome;
+          moneyChange = outcome.moneyChange;
+          player.money += moneyChange;
+        }
 
-        player.roundOutcome = outcome.outcome;
-        player.money += outcome.moneyChange;
+        player.roundOutcome = finalOutcome as any;
 
         // Update win/loss streaks - streaks reset when opposite outcome occurs
-        console.log(`BEFORE streak update - Player ${player.displayName}: outcome=${outcome.outcome}, winStreak=${player.winStreak}, lossStreak=${player.lossStreak}`);
+        console.log(`BEFORE streak update - Player ${player.displayName}: outcome=${finalOutcome}, winStreak=${player.winStreak}, lossStreak=${player.lossStreak}`);
         
-        if (outcome.outcome === 'win') {
+        if (finalOutcome === 'win') {
           player.winStreak += 1;
           player.lossStreak = 0; // Reset loss streak on any win
           console.log(`Player ${player.displayName} WON - Win streak: ${player.winStreak}, Loss streak: ${player.lossStreak}`);
-        } else if (outcome.outcome === 'lose' || outcome.outcome === 'bust') {
+        } else if (finalOutcome === 'lose' || finalOutcome === 'bust') {
           player.lossStreak += 1;
           player.winStreak = 0; // Reset win streak on any loss
           console.log(`Player ${player.displayName} LOST/BUST - Win streak: ${player.winStreak}, Loss streak: ${player.lossStreak}`);
-        } else if (outcome.outcome === 'draw') {
+        } else if (finalOutcome === 'draw') {
           // Draw resets both streaks
           player.winStreak = 0;
           player.lossStreak = 0;
           console.log(`Player ${player.displayName} DRAW - Both streaks reset to 0`);
         } else {
-          console.log(`Player ${player.displayName} - Unknown outcome: ${outcome.outcome}, streaks unchanged`);
+          console.log(`Player ${player.displayName} - Unknown outcome: ${finalOutcome}, streaks unchanged`);
         }
         
         console.log(`AFTER streak update - Player ${player.displayName}: winStreak=${player.winStreak}, lossStreak=${player.lossStreak}`);
