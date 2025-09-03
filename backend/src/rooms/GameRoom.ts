@@ -412,9 +412,9 @@ export class GameRoom extends Room<GameState> {
       //Delay showing round outcome to players
       await this.delay(gameConfig.roundOutcomeDelay);
 
-      //Settle score between each player that's not busted, and dealer
-      for (const playerId of this.makeRoundIterator()) {
-        const player = this.state.players.get(playerId);
+      //Settle score between each player and dealer (including busted players for streak tracking)
+      for (const player of this.state.players.values()) {
+        if (!player || player.disconnected) continue;
 
         // Check if player already busted (roundOutcome was set to 'bust' during turns)
         let finalOutcome: string;
