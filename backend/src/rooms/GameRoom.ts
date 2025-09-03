@@ -474,9 +474,14 @@ export class GameRoom extends Room<GameState> {
 
     //Remove all players cards, and set their ready state
     for (const player of this.state.players.values()) {
+      console.log(`ROUND CLEANUP - Player ${player.displayName}: winStreak=${player.winStreak}, lossStreak=${player.lossStreak} (BEFORE cleanup)`);
+      
       player.hand.clear();
       player.ready = player.autoReady;
       player.roundOutcome = '';
+      // NOTE: NOT clearing winStreak and lossStreak - they should persist across rounds
+
+      console.log(`ROUND CLEANUP - Player ${player.displayName}: winStreak=${player.winStreak}, lossStreak=${player.lossStreak} (AFTER cleanup)`);
 
       //Remove players that are still disconnected
       if (player.disconnected) this.deletePlayer(player.sessionId);
