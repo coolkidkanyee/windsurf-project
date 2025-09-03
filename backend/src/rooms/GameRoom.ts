@@ -429,13 +429,16 @@ export class GameRoom extends Room<GameState> {
         if (outcome.outcome === 'win') {
           player.winStreak += 1;
           player.lossStreak = 0; // Reset loss streak on any win
+          console.log(`Player ${player.displayName} won - Win streak: ${player.winStreak}, Loss streak: ${player.lossStreak}`);
         } else if (outcome.outcome === 'lose' || outcome.outcome === 'bust') {
           player.lossStreak += 1;
           player.winStreak = 0; // Reset win streak on any loss
+          console.log(`Player ${player.displayName} lost - Win streak: ${player.winStreak}, Loss streak: ${player.lossStreak}`);
         } else if (outcome.outcome === 'draw') {
           // Draw resets both streaks
           player.winStreak = 0;
           player.lossStreak = 0;
+          console.log(`Player ${player.displayName} drew - Both streaks reset to 0`);
         }
       }
     }

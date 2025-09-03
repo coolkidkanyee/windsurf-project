@@ -30,7 +30,10 @@ export class PlayerComponent implements OnInit {
         name: this.player.displayName,
         hasProfilePicture: !!this.player.profilePicture,
         profilePictureLength: this.player.profilePicture?.length || 0,
-        profilePicturePreview: this.player.profilePicture?.substring(0, 50) + '...'
+        profilePicturePreview: this.player.profilePicture?.substring(0, 50) + '...',
+        winStreak: this.player.winStreak,
+        lossStreak: this.player.lossStreak,
+        money: this.player.money
       });
     }
   }
@@ -64,9 +67,20 @@ export class PlayerComponent implements OnInit {
   }
 
   shouldShowLossStreak(): boolean {
-    return !!(this.player && 
+    const result = !!(this.player && 
            this.type !== 'dealer' &&
            (this.player.lossStreak >= 3 || this.player.money < 0));
+    
+    if (this.player && this.type !== 'dealer') {
+      console.log('Loss streak check:', {
+        playerName: this.player.displayName,
+        lossStreak: this.player.lossStreak,
+        money: this.player.money,
+        shouldShow: result
+      });
+    }
+    
+    return result;
   }
 
   getWinStreakTooltip(): string {
