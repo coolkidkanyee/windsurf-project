@@ -8,7 +8,7 @@
     "start": "ng serve",
     "backend-start": "cd backend && npm start",
     "build": "ng build",
-    "deploy": "ng deploy --base-href=/21-online/",
+    "deploy": "ng deploy --base-href=/windsurf-project/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "prettier": "npx prettier --write .",

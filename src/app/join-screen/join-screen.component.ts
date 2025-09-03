@@ -30,14 +30,14 @@ export class JoinScreenComponent implements OnInit {
   }
 
   loadVersion() {
-    this.http.get<{version: string}>('/assets/version.json').subscribe({
+    this.http.get<{version: string}>('./assets/version.json').subscribe({
       next: (data) => {
         this.version = data.version;
         console.log('Version loaded:', this.version);
       },
       error: (err) => {
         console.error('Error loading version:', err);
-        this.version = '1.35';
+        this.version = '1.37';
       }
     });
   }
