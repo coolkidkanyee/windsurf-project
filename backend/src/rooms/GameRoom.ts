@@ -426,20 +426,26 @@ export class GameRoom extends Room<GameState> {
         player.money += outcome.moneyChange;
 
         // Update win/loss streaks - streaks reset when opposite outcome occurs
+        console.log(`BEFORE streak update - Player ${player.displayName}: outcome=${outcome.outcome}, winStreak=${player.winStreak}, lossStreak=${player.lossStreak}`);
+        
         if (outcome.outcome === 'win') {
           player.winStreak += 1;
           player.lossStreak = 0; // Reset loss streak on any win
-          console.log(`Player ${player.displayName} won - Win streak: ${player.winStreak}, Loss streak: ${player.lossStreak}`);
+          console.log(`Player ${player.displayName} WON - Win streak: ${player.winStreak}, Loss streak: ${player.lossStreak}`);
         } else if (outcome.outcome === 'lose' || outcome.outcome === 'bust') {
           player.lossStreak += 1;
           player.winStreak = 0; // Reset win streak on any loss
-          console.log(`Player ${player.displayName} lost - Win streak: ${player.winStreak}, Loss streak: ${player.lossStreak}`);
+          console.log(`Player ${player.displayName} LOST/BUST - Win streak: ${player.winStreak}, Loss streak: ${player.lossStreak}`);
         } else if (outcome.outcome === 'draw') {
           // Draw resets both streaks
           player.winStreak = 0;
           player.lossStreak = 0;
-          console.log(`Player ${player.displayName} drew - Both streaks reset to 0`);
+          console.log(`Player ${player.displayName} DRAW - Both streaks reset to 0`);
+        } else {
+          console.log(`Player ${player.displayName} - Unknown outcome: ${outcome.outcome}, streaks unchanged`);
         }
+        
+        console.log(`AFTER streak update - Player ${player.displayName}: winStreak=${player.winStreak}, lossStreak=${player.lossStreak}`);
       }
     }
 
