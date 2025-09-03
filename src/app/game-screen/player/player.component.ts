@@ -69,14 +69,15 @@ export class PlayerComponent implements OnInit {
   shouldShowLossStreak(): boolean {
     const result = !!(this.player && 
            this.type !== 'dealer' &&
-           (this.player.lossStreak >= 3 || this.player.money < 0));
+           (this.player.lossStreak >= 1 || this.player.money < 0));
     
     if (this.player && this.type !== 'dealer') {
       console.log('Loss streak check:', {
         playerName: this.player.displayName,
         lossStreak: this.player.lossStreak,
         money: this.player.money,
-        shouldShow: result
+        shouldShow: result,
+        condition: `lossStreak(${this.player.lossStreak}) >= 1 OR money(${this.player.money}) < 0`
       });
     }
     
