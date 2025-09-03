@@ -153,6 +153,89 @@ export class GameRoom extends Room<GameState> {
         .find((c) => c.sessionId == id)
         ?.leave(Protocol.WS_CLOSE_CONSENTED);
     });
+
+    // Admin commands
+    this.onMessage('admin_dealer_lose', (client) => {
+      if (!this.state.players.get(client.sessionId)?.admin) return;
+      
+      this.log(`Admin: Force dealer lose`, client);
+      // Set dealer hand to bust (over 21)
+      this.state.dealerHand.clear();
+      this.state.dealerHand.addCard();
+      this.state.dealerHand.addCard();
+      this.state.dealerHand.addCard();
+      this.state.dealerHand.addCard();
+      this.state.dealerHand.addCard(); // 5 cards should bust
+    });
+
+    this.onMessage('admin_give_money', (client, data: { playerId: string, amount: number }) => {
+      if (!this.state.players.get(client.sessionId)?.admin) return;
+      
+      const targetPlayer = this.state.players.get(data.playerId);
+      if (targetPlayer) {
+        targetPlayer.money += data.amount;
+        this.log(`Admin: Gave ${data.amount} money to ${targetPlayer.displayName}`, client);
+      }
+    });
+
+    this.onMessage('admin_take_money', (client, data: { playerId: string, amount: number }) => {
+      if (!this.state.players.get(client.sessionId)?.admin) return;
+      
+      const targetPlayer = this.state.players.get(data.playerId);
+      if (targetPlayer) {
+        targetPlayer.money -= data.amount;
+        this.log(`Admin: Took ${data.amount} money from ${targetPlayer.displayName}`, client);
+      }
+    });
+
+    this.onMessage('admin_give_gif', (client, data: { playerId: string }) => {
+      if (!this.state.players.get(client.sessionId)?.admin) return;
+      
+      const targetPlayer = this.state.players.get(data.playerId);
+      if (targetPlayer) {
+        // Force win streak to trigger gif
+        targetPlayer.winStreak = 3;
+        targetPlayer.lossStreak = 0;
+        this.log(`Admin: Gave gif icon to ${targetPlayer.displayName}`, client);
+      }
+    });
+
+    this.onMessage('admin_make_lose', (client, data: { playerId: string }) => {
+      if (!this.state.players.get(client.sessionId)?.admin) return;
+      
+      const targetPlayer = this.state.players.get(data.playerId);
+      if (targetPlayer) {
+        // Force player to bust
+        targetPlayer.hand.clear();
+        targetPlayer.hand.addCard();
+        targetPlayer.hand.addCard();
+        targetPlayer.hand.addCard();
+        targetPlayer.hand.addCard();
+        targetPlayer.hand.addCard(); // 5 cards should bust
+        targetPlayer.ready = false;
+        targetPlayer.roundOutcome = 'bust';
+        this.log(`Admin: Made ${targetPlayer.displayName} lose`, client);
+      }
+    });
+
+    this.onMessage('admin_give_blackjack', (client, data: { playerId: string }) => {
+      if (!this.state.players.get(client.sessionId)?.admin) return;
+      
+      const targetPlayer = this.state.players.get(data.playerId);
+      if (targetPlayer) {
+        // Give player blackjack (Ace + 10-value card)
+        targetPlayer.hand.clear();
+        targetPlayer.hand.addCard();
+        targetPlayer.hand.addCard();
+        // Manually set to blackjack values - need to access the cards properly
+        if (targetPlayer.hand.cards.length >= 2) {
+          targetPlayer.hand.cards[0].value = 'A' as any;
+          targetPlayer.hand.cards[1].value = 'K' as any;
+          targetPlayer.hand.calculateScore();
+        }
+        this.log(`Admin: Gave blackjack to ${targetPlayer.displayName}`, client);
+      }
+    });
   }
 
   onAuth(client: Client) {

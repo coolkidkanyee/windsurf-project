@@ -1,0 +1,113 @@
+<!-- Password Input Modal -->
+<div *ngIf="showPasswordInput" class="admin-overlay">
+  <div class="password-modal">
+    <div class="modal-header">
+      <h3>ACCESS REQUIRED</h3>
+      <div class="attempts-counter">
+        Attempts remaining: {{ getRemainingAttempts() }}
+      </div>
+    </div>
+    <div class="modal-body">
+      <input 
+        type="password" 
+        [(ngModel)]="password" 
+        placeholder="Enter access code..."
+        class="password-input"
+        autofocus>
+      <div class="modal-buttons">
+        <button (click)="checkPassword()" class="btn-confirm">CONFIRM</button>
+        <button (click)="closePasswordInput()" class="btn-cancel">CANCEL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Menu -->
+<div *ngIf="showAdminMenu" class="admin-overlay">
+  <div class="admin-menu">
+    <div class="menu-header">
+      <h2>ADMIN PANEL</h2>
+      <button (click)="closeAdminMenu()" class="close-btn">×</button>
+    </div>
+    
+    <div class="menu-content">
+      <!-- Player Selection -->
+      <div class="section">
+        <h3>TARGET SELECTION</h3>
+        <select [(ngModel)]="selectedPlayer" class="player-select">
+          <option value="">Select Player...</option>
+          <option *ngFor="let player of players" [value]="player.id">
+            {{ player.displayName }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Money Controls -->
+      <div class="section">
+        <h3>MONEY CONTROLS</h3>
+        <div class="money-input-group">
+          <input 
+            type="number" 
+            [(ngModel)]="moneyAmount" 
+            class="money-input"
+            placeholder="Amount">
+          <div class="button-group">
+            <button 
+              (click)="giveMoneyToPlayer()" 
+              [disabled]="!selectedPlayer"
+              class="btn-action btn-give">
+              GIVE MONEY
+            </button>
+            <button 
+              (click)="takeMoneyFromPlayer()" 
+              [disabled]="!selectedPlayer"
+              class="btn-action btn-take">
+              TAKE MONEY
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Controls -->
+      <div class="section">
+        <h3>GAME CONTROLS</h3>
+        <div class="button-grid">
+          <button 
+            (click)="makeDealerLose()" 
+            class="btn-action btn-dealer">
+            MAKE DEALER LOSE
+          </button>
+          <button 
+            (click)="makePlayerLose()" 
+            [disabled]="!selectedPlayer"
+            class="btn-action btn-lose">
+            MAKE PLAYER LOSE
+          </button>
+          <button 
+            (click)="givePlayerBlackjack()" 
+            [disabled]="!selectedPlayer"
+            class="btn-action btn-blackjack">
+            GIVE BLACKJACK
+          </button>
+          <button 
+            (click)="givePlayerGifIcon()" 
+            [disabled]="!selectedPlayer"
+            class="btn-action btn-gif">
+            GIVE GIF ICON
+          </button>
+        </div>
+      </div>
+
+      <!-- Special Actions -->
+      <div class="section">
+        <h3>SPECIAL ACTIONS</h3>
+        <button 
+          (click)="sendJumpscare()" 
+          [disabled]="!selectedPlayer"
+          class="btn-action btn-jumpscare">
+          SEND JUMPSCARE (COMING SOON)
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

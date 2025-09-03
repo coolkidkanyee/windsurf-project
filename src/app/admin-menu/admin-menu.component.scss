@@ -1,0 +1,340 @@
+.admin-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  font-family: 'Courier New', monospace;
+}
+
+.password-modal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid #00ff00;
+  border-radius: 8px;
+  padding: 30px;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 20px;
+  
+  h3 {
+    color: #00ff00;
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  }
+}
+
+.attempts-counter {
+  color: #ff6b6b;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.modal-body {
+  .password-input {
+    width: 100%;
+    padding: 12px;
+    background: #000;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+    
+    &::placeholder {
+      color: #666;
+    }
+  }
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.btn-confirm, .btn-cancel {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-confirm {
+  background: #00ff00;
+  color: #000;
+  
+  &:hover {
+    background: #00cc00;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  }
+}
+
+.btn-cancel {
+  background: #ff4444;
+  color: #fff;
+  
+  &:hover {
+    background: #cc0000;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+  }
+}
+
+.admin-menu {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid #00ff00;
+  border-radius: 12px;
+  width: 90vw;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.4);
+  animation: slideIn 0.3s ease-out;
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  border-bottom: 1px solid #00ff00;
+  background: rgba(0, 255, 0, 0.1);
+  
+  h2 {
+    color: #00ff00;
+    margin: 0;
+    font-size: 28px;
+    text-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+  }
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #ff4444;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+  
+  &:hover {
+    background: rgba(255, 68, 68, 0.2);
+    transform: scale(1.1);
+  }
+}
+
+.menu-content {
+  padding: 30px;
+}
+
+.section {
+  margin-bottom: 30px;
+  
+  h3 {
+    color: #00ff00;
+    font-size: 18px;
+    margin: 0 0 15px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
+  }
+}
+
+.player-select, .money-input {
+  background: #000;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  padding: 10px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
+  }
+}
+
+.player-select {
+  width: 100%;
+  
+  option {
+    background: #000;
+    color: #00ff00;
+  }
+}
+
+.money-input-group {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+  
+  .money-input {
+    width: 120px;
+  }
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.btn-action {
+  padding: 12px 20px;
+  border: 1px solid;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  &:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.btn-give {
+  background: #00ff00;
+  color: #000;
+  border-color: #00ff00;
+  
+  &:hover:not(:disabled) {
+    background: #00cc00;
+    box-shadow: 0 4px 12px rgba(0, 255, 0, 0.4);
+  }
+}
+
+.btn-take {
+  background: #ff4444;
+  color: #fff;
+  border-color: #ff4444;
+  
+  &:hover:not(:disabled) {
+    background: #cc0000;
+    box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+  }
+}
+
+.btn-dealer {
+  background: #ff9500;
+  color: #000;
+  border-color: #ff9500;
+  
+  &:hover:not(:disabled) {
+    background: #e6850e;
+    box-shadow: 0 4px 12px rgba(255, 149, 0, 0.4);
+  }
+}
+
+.btn-lose {
+  background: #8b0000;
+  color: #fff;
+  border-color: #8b0000;
+  
+  &:hover:not(:disabled) {
+    background: #660000;
+    box-shadow: 0 4px 12px rgba(139, 0, 0, 0.4);
+  }
+}
+
+.btn-blackjack {
+  background: #ffd700;
+  color: #000;
+  border-color: #ffd700;
+  
+  &:hover:not(:disabled) {
+    background: #e6c200;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+  }
+}
+
+.btn-gif {
+  background: #9932cc;
+  color: #fff;
+  border-color: #9932cc;
+  
+  &:hover:not(:disabled) {
+    background: #7a2a9e;
+    box-shadow: 0 4px 12px rgba(153, 50, 204, 0.4);
+  }
+}
+
+.btn-jumpscare {
+  background: #dc143c;
+  color: #fff;
+  border-color: #dc143c;
+  
+  &:hover:not(:disabled) {
+    background: #b91c3c;
+    box-shadow: 0 4px 12px rgba(220, 20, 60, 0.4);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Scrollbar styling */
+.admin-menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-menu::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.admin-menu::-webkit-scrollbar-thumb {
+  background: #00ff00;
+  border-radius: 4px;
+}
+
+.admin-menu::-webkit-scrollbar-thumb:hover {
+  background: #00cc00;
+}

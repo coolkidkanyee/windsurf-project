@@ -22,10 +22,11 @@ import { InputConstrainDirective } from './game-screen/player-action/input-const
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NotifierModule } from 'angular-notifier';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HandScoreComponent } from './game-screen/player/hand-score/hand-score.component';
+import { AdminMenuComponent } from './admin-menu/admin-menu.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
@@ -41,6 +42,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     KickDialogComponent,
     InputConstrainDirective,
     HandScoreComponent,
+    AdminMenuComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +58,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatTooltipModule,
     ClipboardModule,
     ReactiveFormsModule,
+    FormsModule,
     MatCheckboxModule,
     LayoutModule,
     NotifierModule.withConfig({
