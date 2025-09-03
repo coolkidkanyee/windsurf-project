@@ -1,8 +1,8 @@
 <div class="grid place-items-center min-h-full p-4">
   <!-- Admin Menu -->
   <app-admin-menu 
-    [room]="game.room" 
-    [players]="game.state?.players ? Array.from(game.state.players.values()) : []">
+    [room]="game.room || null" 
+    [players]="getPlayers()">
   </app-admin-menu>
   <div class="flex gap-2 place-self-start">
     <button

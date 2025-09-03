@@ -16,6 +16,7 @@ import {
 export class GameScreenComponent {
   location = location;
   Math = Math;
+  Array = Array;
 
   smallScreen$: Observable<boolean>;
 
@@ -38,5 +39,9 @@ export class GameScreenComponent {
       this.game.room!.sessionId,
       gameConfig.maxClients
     );
+  }
+
+  getPlayers() {
+    return this.game.room?.state?.players ? Array.from(this.game.room.state.players.values()) : [];
   }
 }
