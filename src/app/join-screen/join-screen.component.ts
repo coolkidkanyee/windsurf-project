@@ -30,7 +30,7 @@ export class JoinScreenComponent implements OnInit {
   }
 
   loadVersion() {
-    this.http.get<{version: string}>('./assets/version.json').subscribe({
+    this.http.get<{version: string}>('/windsurf-project/assets/version.json').subscribe({
       next: (data) => {
         this.version = data.version;
         console.log('Version loaded:', this.version);
