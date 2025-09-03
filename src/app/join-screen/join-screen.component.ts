@@ -37,7 +37,7 @@ export class JoinScreenComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading version:', err);
-        this.version = '1.37';
+        this.version = '1.38';
       }
     });
   }
