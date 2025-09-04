@@ -17,6 +17,7 @@ export class AdminMenuComponent implements OnInit, OnDestroy {
   maxAttempts = 3;
   selectedPlayer = '';
   moneyAmount = 100;
+  selectedGifType = 'win';
   
   // Konami code: ↑↑↓↓←→←→BA
   private konamiCode = [
@@ -113,7 +114,8 @@ export class AdminMenuComponent implements OnInit, OnDestroy {
   givePlayerGifIcon() {
     if (this.room && this.selectedPlayer) {
       this.room.send('admin_give_gif', { 
-        playerId: this.selectedPlayer 
+        playerId: this.selectedPlayer,
+        gifType: this.selectedGifType
       });
     }
   }

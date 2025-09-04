@@ -188,15 +188,22 @@ export class GameRoom extends Room<GameState> {
       }
     });
 
-    this.onMessage('admin_give_gif', (client, data: { playerId: string }) => {
+    this.onMessage('admin_give_gif', (client, data: { playerId: string, gifType: string }) => {
       if (!this.state.players.get(client.sessionId)?.admin) return;
       
       const targetPlayer = this.state.players.get(data.playerId);
       if (targetPlayer) {
-        // Force win streak to trigger gif
-        targetPlayer.winStreak = 3;
-        targetPlayer.lossStreak = 0;
-        this.log(`Admin: Gave gif icon to ${targetPlayer.displayName}`, client);
+        if (data.gifType === 'win') {
+          // Force win streak to trigger source.gif
+          targetPlayer.winStreak = 3;
+          targetPlayer.lossStreak = 0;
+          this.log(`Admin: Gave win gif (source.gif) to ${targetPlayer.displayName}`, client);
+        } else if (data.gifType === 'loss') {
+          // Force loss streak to trigger clown.gif
+          targetPlayer.lossStreak = 3;
+          targetPlayer.winStreak = 0;
+          this.log(`Admin: Gave loss gif (clown.gif) to ${targetPlayer.displayName}`, client);
+        }
       }
     });
 
@@ -205,16 +212,22 @@ export class GameRoom extends Room<GameState> {
       
       const targetPlayer = this.state.players.get(data.playerId);
       if (targetPlayer) {
-        // Force player to bust
+        // Force player to bust by setting their hand score over 21
         targetPlayer.hand.clear();
-        targetPlayer.hand.addCard();
-        targetPlayer.hand.addCard();
-        targetPlayer.hand.addCard();
-        targetPlayer.hand.addCard();
-        targetPlayer.hand.addCard(); // 5 cards should bust
+        // Add cards that will definitely bust (multiple face cards)
+        for (let i = 0; i < 3; i++) {
+          targetPlayer.hand.addCard();
+          if (targetPlayer.hand.cards[i]) {
+            targetPlayer.hand.cards[i].value = 'K' as any; // King = 10
+          }
+        }
+        targetPlayer.hand.calculateScore(); // This should be over 21
         targetPlayer.ready = false;
         targetPlayer.roundOutcome = 'bust';
-        this.log(`Admin: Made ${targetPlayer.displayName} lose`, client);
+        // Force loss streak increment
+        targetPlayer.lossStreak += 1;
+        targetPlayer.winStreak = 0;
+        this.log(`Admin: Made ${targetPlayer.displayName} lose (bust with score ${targetPlayer.hand.score})`, client);
       }
     });
 
@@ -227,13 +240,16 @@ export class GameRoom extends Room<GameState> {
         targetPlayer.hand.clear();
         targetPlayer.hand.addCard();
         targetPlayer.hand.addCard();
-        // Manually set to blackjack values - need to access the cards properly
+        // Manually set to blackjack values
         if (targetPlayer.hand.cards.length >= 2) {
           targetPlayer.hand.cards[0].value = 'A' as any;
           targetPlayer.hand.cards[1].value = 'K' as any;
           targetPlayer.hand.calculateScore();
+          // Force win streak increment for blackjack
+          targetPlayer.winStreak += 1;
+          targetPlayer.lossStreak = 0;
         }
-        this.log(`Admin: Gave blackjack to ${targetPlayer.displayName}`, client);
+        this.log(`Admin: Gave blackjack (score: ${targetPlayer.hand.score}) to ${targetPlayer.displayName}`, client);
       }
     });
   }
