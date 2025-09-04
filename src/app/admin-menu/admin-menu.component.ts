@@ -12,12 +12,18 @@ export class AdminMenuComponent implements OnInit, OnDestroy {
 
   showPasswordInput = false;
   showAdminMenu = false;
+  adminUnlocked = false;
   password = '';
   attempts = 0;
   maxAttempts = 3;
   selectedPlayer = '';
   moneyAmount = 100;
   selectedGifType = 'win';
+  
+  // Dragging functionality
+  isDragging = false;
+  dragOffset = { x: 0, y: 0 };
+  menuPosition = { x: 0, y: 0 };
   
   // Konami code: ↑↑↓↓←→←→BA
   private konamiCode = [
@@ -38,7 +44,13 @@ export class AdminMenuComponent implements OnInit, OnDestroy {
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
-    if (this.showAdminMenu) return;
+    // Insert key toggle (only works after admin is unlocked)
+    if (event.key === 'Insert' && this.adminUnlocked) {
+      this.showAdminMenu = !this.showAdminMenu;
+      return;
+    }
+
+    if (this.showAdminMenu && this.adminUnlocked) return;
 
     if (this.showPasswordInput) {
       if (event.key === 'Enter') {
@@ -65,6 +77,7 @@ export class AdminMenuComponent implements OnInit, OnDestroy {
     if (this.password.toLowerCase() === 'xbox') {
       this.showPasswordInput = false;
       this.showAdminMenu = true;
+      this.adminUnlocked = true;
       this.password = '';
       this.attempts = 0;
     } else {
@@ -86,53 +99,95 @@ export class AdminMenuComponent implements OnInit, OnDestroy {
     this.showAdminMenu = false;
   }
 
+  // Dragging functionality
+  onMouseDown(event: MouseEvent) {
+    this.isDragging = true;
+    const rect = (event.target as HTMLElement).closest('.admin-menu')?.getBoundingClientRect();
+    if (rect) {
+      this.dragOffset.x = event.clientX - rect.left;
+      this.dragOffset.y = event.clientY - rect.top;
+    }
+    event.preventDefault();
+  }
+
+  @HostListener('window:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    if (this.isDragging) {
+      this.menuPosition.x = event.clientX - this.dragOffset.x;
+      this.menuPosition.y = event.clientY - this.dragOffset.y;
+    }
+  }
+
+  @HostListener('window:mouseup', ['$event'])
+  onMouseUp(event: MouseEvent) {
+    this.isDragging = false;
+  }
+
   // Admin actions
   makeDealerLose() {
     if (this.room) {
+      console.log('Sending admin_dealer_lose command');
       this.room.send('admin_dealer_lose');
+    } else {
+      console.error('No room connection for admin command');
     }
   }
 
   giveMoneyToPlayer() {
     if (this.room && this.selectedPlayer) {
+      console.log(`Sending admin_give_money: ${this.moneyAmount} to ${this.selectedPlayer}`);
       this.room.send('admin_give_money', { 
         playerId: this.selectedPlayer, 
         amount: this.moneyAmount 
       });
+    } else {
+      console.error('Missing room or selectedPlayer for give money command');
     }
   }
 
   takeMoneyFromPlayer() {
     if (this.room && this.selectedPlayer) {
+      console.log(`Sending admin_take_money: ${this.moneyAmount} from ${this.selectedPlayer}`);
       this.room.send('admin_take_money', { 
         playerId: this.selectedPlayer, 
         amount: this.moneyAmount 
       });
+    } else {
+      console.error('Missing room or selectedPlayer for take money command');
     }
   }
 
   givePlayerGifIcon() {
     if (this.room && this.selectedPlayer) {
+      console.log(`Sending admin_give_gif: ${this.selectedGifType} to ${this.selectedPlayer}`);
       this.room.send('admin_give_gif', { 
         playerId: this.selectedPlayer,
         gifType: this.selectedGifType
       });
+    } else {
+      console.error('Missing room or selectedPlayer for give gif command');
     }
   }
 
   makePlayerLose() {
     if (this.room && this.selectedPlayer) {
+      console.log(`Sending admin_make_lose to ${this.selectedPlayer}`);
       this.room.send('admin_make_lose', { 
         playerId: this.selectedPlayer 
       });
+    } else {
+      console.error('Missing room or selectedPlayer for make lose command');
     }
   }
 
   givePlayerBlackjack() {
     if (this.room && this.selectedPlayer) {
+      console.log(`Sending admin_give_blackjack to ${this.selectedPlayer}`);
       this.room.send('admin_give_blackjack', { 
         playerId: this.selectedPlayer 
       });
+    } else {
+      console.error('Missing room or selectedPlayer for give blackjack command');
     }
   }
 

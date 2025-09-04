@@ -4,12 +4,10 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
   z-index: 9999;
   font-family: 'Courier New', monospace;
+  pointer-events: none;
 }
 
 .password-modal {
@@ -103,12 +101,16 @@
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   border: 2px solid #00ff00;
   border-radius: 12px;
-  width: 90vw;
-  max-width: 800px;
+  width: 800px;
+  max-width: 90vw;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 0 30px rgba(0, 255, 0, 0.4);
   animation: slideIn 0.3s ease-out;
+  pointer-events: all;
+  position: absolute;
+  top: 50px;
+  left: 50px;
 }
 
 .menu-header {
@@ -124,6 +126,13 @@
     margin: 0;
     font-size: 28px;
     text-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+  }
+  
+  .header-info {
+    small {
+      color: #888;
+      font-size: 12px;
+    }
   }
 }
 

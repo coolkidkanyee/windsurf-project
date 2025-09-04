@@ -24,9 +24,17 @@
 
 <!-- Admin Menu -->
 <div *ngIf="showAdminMenu" class="admin-overlay">
-  <div class="admin-menu">
-    <div class="menu-header">
+  <div class="admin-menu" 
+       [style.transform]="'translate(' + menuPosition.x + 'px, ' + menuPosition.y + 'px)'"
+       [style.position]="'fixed'"
+       [style.z-index]="'10000'">
+    <div class="menu-header" 
+         (mousedown)="onMouseDown($event)"
+         [style.cursor]="'move'">
       <h2>ADMIN PANEL</h2>
+      <div class="header-info">
+        <small>Press INSERT to toggle</small>
+      </div>
       <button (click)="closeAdminMenu()" class="close-btn">×</button>
     </div>
     
@@ -36,7 +44,7 @@
         <h3>TARGET SELECTION</h3>
         <select [(ngModel)]="selectedPlayer" class="player-select">
           <option value="">Select Player...</option>
-          <option *ngFor="let player of players" [value]="player.id">
+          <option *ngFor="let player of players" [value]="player.sessionId">
             {{ player.displayName }}
           </option>
         </select>
