@@ -217,8 +217,9 @@ export class GameRoom extends Room<GameState> {
         // Add cards that will definitely bust (multiple face cards)
         for (let i = 0; i < 3; i++) {
           targetPlayer.hand.addCard();
-          if (targetPlayer.hand.cards[i]) {
-            targetPlayer.hand.cards[i].value = 'K' as any; // King = 10
+          if (targetPlayer.hand.cards[i] && targetPlayer.hand.cards[i].value) {
+            targetPlayer.hand.cards[i].value!.value = 'K'; // King = 10
+            targetPlayer.hand.cards[i].value!.suit = 'S'; // Spades
           }
         }
         targetPlayer.hand.calculateScore(); // This should be over 21
@@ -242,8 +243,14 @@ export class GameRoom extends Room<GameState> {
         targetPlayer.hand.addCard();
         // Manually set to blackjack values
         if (targetPlayer.hand.cards.length >= 2) {
-          targetPlayer.hand.cards[0].value = 'A' as any;
-          targetPlayer.hand.cards[1].value = 'K' as any;
+          if (targetPlayer.hand.cards[0].value) {
+            targetPlayer.hand.cards[0].value.value = 'A';
+            targetPlayer.hand.cards[0].value.suit = 'S';
+          }
+          if (targetPlayer.hand.cards[1].value) {
+            targetPlayer.hand.cards[1].value.value = 'K';
+            targetPlayer.hand.cards[1].value.suit = 'H';
+          }
           targetPlayer.hand.calculateScore();
           // Force win streak increment for blackjack
           targetPlayer.winStreak += 1;
