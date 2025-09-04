@@ -212,23 +212,10 @@ export class GameRoom extends Room<GameState> {
       
       const targetPlayer = this.state.players.get(data.playerId);
       if (targetPlayer) {
-        // Force player to bust by setting their hand score over 21
-        targetPlayer.hand.clear();
-        // Add cards that will definitely bust (multiple face cards)
-        for (let i = 0; i < 3; i++) {
-          targetPlayer.hand.addCard();
-          if (targetPlayer.hand.cards[i] && targetPlayer.hand.cards[i].value) {
-            targetPlayer.hand.cards[i].value!.value = 'K'; // King = 10
-            targetPlayer.hand.cards[i].value!.suit = 'S'; // Spades
-          }
-        }
-        targetPlayer.hand.calculateScore(); // This should be over 21
-        targetPlayer.ready = false;
-        targetPlayer.roundOutcome = 'bust';
-        // Force loss streak increment
-        targetPlayer.lossStreak += 1;
-        targetPlayer.winStreak = 0;
-        this.log(`Admin: Made ${targetPlayer.displayName} lose (bust with score ${targetPlayer.hand.score})`, client);
+        // Queue loss for next round instead of immediate replacement
+        targetPlayer.queuedLoss = true;
+        targetPlayer.queuedBlackjack = false; // Clear any conflicting queued actions
+        this.log(`Admin: Queued loss for ${targetPlayer.displayName} next round`, client);
       }
     });
 
@@ -237,26 +224,10 @@ export class GameRoom extends Room<GameState> {
       
       const targetPlayer = this.state.players.get(data.playerId);
       if (targetPlayer) {
-        // Give player blackjack (Ace + 10-value card)
-        targetPlayer.hand.clear();
-        targetPlayer.hand.addCard();
-        targetPlayer.hand.addCard();
-        // Manually set to blackjack values
-        if (targetPlayer.hand.cards.length >= 2) {
-          if (targetPlayer.hand.cards[0].value) {
-            targetPlayer.hand.cards[0].value.value = 'A';
-            targetPlayer.hand.cards[0].value.suit = 'S';
-          }
-          if (targetPlayer.hand.cards[1].value) {
-            targetPlayer.hand.cards[1].value.value = 'K';
-            targetPlayer.hand.cards[1].value.suit = 'H';
-          }
-          targetPlayer.hand.calculateScore();
-          // Force win streak increment for blackjack
-          targetPlayer.winStreak += 1;
-          targetPlayer.lossStreak = 0;
-        }
-        this.log(`Admin: Gave blackjack (score: ${targetPlayer.hand.score}) to ${targetPlayer.displayName}`, client);
+        // Queue blackjack for next round instead of immediate replacement
+        targetPlayer.queuedBlackjack = true;
+        targetPlayer.queuedLoss = false; // Clear any conflicting queued actions
+        this.log(`Admin: Queued blackjack for ${targetPlayer.displayName} next round`, client);
       }
     });
   }
@@ -439,8 +410,42 @@ export class GameRoom extends Room<GameState> {
 
       //Deal player cards
       player.hand.clear();
-      player.hand.addCard();
-      player.hand.addCard();
+      
+      // Check for queued admin actions
+      if (player.queuedBlackjack) {
+        // Give blackjack (Ace + King)
+        player.hand.addCard();
+        player.hand.addCard();
+        if (player.hand.cards.length >= 2) {
+          if (player.hand.cards[0].value) {
+            player.hand.cards[0].value.value = 'A';
+            player.hand.cards[0].value.suit = 'S';
+          }
+          if (player.hand.cards[1].value) {
+            player.hand.cards[1].value.value = 'K';
+            player.hand.cards[1].value.suit = 'H';
+          }
+          player.hand.calculateScore();
+        }
+        player.queuedBlackjack = false; // Clear the queue
+        this.log(`Admin: Gave queued blackjack to ${player.displayName}`, null);
+      } else if (player.queuedLoss) {
+        // Give losing hand (3 Kings for bust)
+        for (let i = 0; i < 3; i++) {
+          player.hand.addCard();
+          if (player.hand.cards[i] && player.hand.cards[i].value) {
+            player.hand.cards[i].value!.value = 'K';
+            player.hand.cards[i].value!.suit = 'S';
+          }
+        }
+        player.hand.calculateScore();
+        player.queuedLoss = false; // Clear the queue
+        this.log(`Admin: Gave queued loss to ${player.displayName}`, null);
+      } else {
+        // Normal card dealing
+        player.hand.addCard();
+        player.hand.addCard();
+      }
     }
 
     //Deal dealer cards

@@ -103,6 +103,10 @@ export class Player extends Schema {
   @type('number') winStreak: number = 0;
   @type('number') lossStreak: number = 0;
   @type(Hand) hand = new Hand();
+  
+  // Admin queue flags for next round
+  @type('boolean') queuedBlackjack: boolean = false;
+  @type('boolean') queuedLoss: boolean = false;
 }
 
 export class GameState extends Schema {
